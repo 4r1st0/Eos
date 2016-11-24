@@ -5,14 +5,11 @@
  */
 package eos.gui;
 
-import eos.io.OutputFormatter;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
+import eos.io.WriteDefaultSpectrum;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
+import java.io.IOException;
+
 
 /**
  *
@@ -32,6 +29,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     private List<Double> energyLeftEdge = new ArrayList<Double>();
     private List<Double> spectrumBin = new ArrayList<Double>();
     private List<Double> spectrumBinUncertainty = new ArrayList<Double>();
+    Exception e;
     
 
     public defaultSpectrumGUI(eosGUI aThis) {
@@ -384,39 +382,24 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             spectrumBinUncertainty.add(Double.parseDouble(line));
         }
         //============END: Read data from GUI===================================
-        
+
         //============START: Write data to file=================================
         try{
-        PrintWriter writer = new PrintWriter(jTextFieldOutName.getText() + ".flu", "UTF-8");
-        if(headerSpectrum.length() > 80) {
-            writer.println(headerSpectrum.substring(0, 80));
-        } else {
-            writer.println(headerSpectrum);
-        }
-        
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-        otherSymbols.setDecimalSeparator('.');
-        otherSymbols.setExponentSeparator("E");
-        otherSymbols.setMinusSign('\u2212');
-        DecimalFormat formatExponential = new DecimalFormat("0.0000E00", otherSymbols);
-        String formatStrHead1 = "%12s%11s%n";
-        writer.write(String.format(formatStrHead1, spectrumForm, energyScale));
-        String formatStrHead2 = "%12s%11s%12s%12s%n";
-        writer.write(String.format(formatStrHead2, "1", numberOfEnergyBins, numberOfEnergyBins, 
-                OutputFormatter.exponentSign(formatExponential.format(energyHighBinEdge), formatExponential.getDecimalFormatSymbols())));
-                        
-        String formatStrData = "%13s%12s%13s%n";
-        for(int i = 0; i < numberOfEnergyBins; i ++ ) {    
-            writer.write(String.format(formatStrData, 
-                        OutputFormatter.exponentSign(formatExponential.format(energyLeftEdge.get(i)), formatExponential.getDecimalFormatSymbols()),
-                        OutputFormatter.exponentSign(formatExponential.format(spectrumBin.get(i)), formatExponential.getDecimalFormatSymbols()),
-                        OutputFormatter.exponentSign(formatExponential.format(spectrumBinUncertainty.get(i)), formatExponential.getDecimalFormatSymbols())));
-        }
-        writer.close();  
-        //============END: Write data to file===============================
+            WriteDefaultSpectrum writeDefaultSpec = new WriteDefaultSpectrum();
+            writeDefaultSpec.WriteDefaultSpectrum(jTextFieldOutName,
+                                     headerSpectrum, numberOfEnergyBins,
+                                     spectrumForm, energyScale,
+                                     energyHighBinEdge,
+                                     energyLeftEdge,
+                                     spectrumBin,
+                                     spectrumBinUncertainty);
         } catch (Exception e) {
-        // catch write UMG file exception
+            System.out.println("problem with path : "+ jTextFieldOutName.getText());
+            System.out.println(e.getMessage());
         }
+     
+
+        //============END: Write data to file===================================
         
         //============START: clear ArrayLists===================================
         energyLeftEdge = new ArrayList<Double>();
