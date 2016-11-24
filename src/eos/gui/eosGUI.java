@@ -423,8 +423,10 @@ public class eosGUI extends javax.swing.JFrame {
         
         for (String line : textAreaDetectorName.getText().split("\\n")) {
             if(line.length()>8){
+                line = line.replaceAll("\\s+","");
                 sphereNames.add(line.substring(0,8));
             } else {
+                line = line.replaceAll("\\s+","");
                 sphereNames.add(line);
             }
         }
@@ -449,23 +451,23 @@ public class eosGUI extends javax.swing.JFrame {
         if(checkboxUMGOut.getState()) {     
             //============START: Write data to file=================================
             try{
-            PrintWriter writer = new PrintWriter(textFieldOutputName.getText() + "-UMG.ibu", "UTF-8");
+            PrintWriter writer = new PrintWriter(textFieldOutputName.getText() + "-UMG.ibu", "ASCII");
             if(header.length() > 80) {
                 writer.println(header.substring(0, 80));
             } else {
                 writer.println(header);
             }
-            String formatStrHead = "%5s %4s %n";
+            String formatStrHead = "%5s%5s%n";
             writer.write(String.format(formatStrHead, numberOfSpheres, dataCorrectionFactor));
                         
             DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
             otherSymbols.setDecimalSeparator('.');
             otherSymbols.setExponentSeparator("E");
-            otherSymbols.setMinusSign('\u2212');
+            otherSymbols.setMinusSign('-');
             DecimalFormat formatExponential = new DecimalFormat("0.0000E00", otherSymbols);
             NumberFormat formatPercent2 = new DecimalFormat("0.00", otherSymbols);
             NumberFormat formatPercent1 = new DecimalFormat("0.0", otherSymbols);
-            String formatStrData = "%-8s %5s  %13s %14s %7s %7s %5s %n";
+            String formatStrData = "%-8s%6s%15s%15s%8s%8s%6s%n";
             for(int i = 0; i < numberOfSpheres; i ++ ) {    
                 writer.write(String.format(formatStrData, sphereNames.get(i), 
                             sphereDiameter.get(i),
