@@ -29,7 +29,7 @@ public class WriteDefaultSpectrum {
         
 
         try(PrintWriter writer = 
-                    new PrintWriter(OutFileName.getText() + ".flu", "UTF-8")) {   
+                    new PrintWriter(OutFileName.getText() + ".flu", "ASCII")) {   
             if(header.length() > 80) {
                 writer.println(header.substring(0, 80));
             } else {
@@ -39,7 +39,7 @@ public class WriteDefaultSpectrum {
             DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
             otherSymbols.setDecimalSeparator('.');
             otherSymbols.setExponentSeparator("E");                             // define exponent separator
-            otherSymbols.setMinusSign('\u2212');                                // define minus (-) sign
+            otherSymbols.setMinusSign('-');                                // define minus (-) sign
             DecimalFormat formatExponential = new DecimalFormat("0.0000E00",
                                                                 otherSymbols);
             String formatStrHead1 = "%12s%11s%n";
