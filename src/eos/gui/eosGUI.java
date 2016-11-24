@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iht.gui;
+package eos.gui;
 
-import iht.io.*;
+import eos.io.*;
 
 import java.awt.TextArea;
 import java.util.*;
@@ -18,7 +18,7 @@ import java.io.PrintWriter;
  *
  * @author dommer01
  */
-public class ihtGUI extends javax.swing.JFrame {
+public class eosGUI extends javax.swing.JFrame {
     
     private String line;
     private String header;
@@ -35,7 +35,7 @@ public class ihtGUI extends javax.swing.JFrame {
     /**
      * Creates new form ihtGUI
      */
-    public ihtGUI() {
+    public eosGUI() {
         initComponents();
     }
 
@@ -590,7 +590,7 @@ public class ihtGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        defaultSpectrumGUI gui = new defaultSpectrumGUI(ihtGUI.this);
+        defaultSpectrumGUI gui = new defaultSpectrumGUI(eosGUI.this);
         gui.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
         gui.setTitle("Default Spectrum Creator");
         gui.setVisible(true);
@@ -603,7 +603,7 @@ public class ihtGUI extends javax.swing.JFrame {
                 /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ihtGUI().setVisible(true);
+                new eosGUI().setVisible(true);
             }
         });
     }

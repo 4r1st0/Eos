@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package iht.gui;
+package eos.gui;
 
-import iht.io.OutputFormatter;
+import eos.io.OutputFormatter;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -34,7 +34,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     private List<Double> spectrumBinUncertainty = new ArrayList<Double>();
     
 
-    public defaultSpectrumGUI(ihtGUI aThis) {
+    public defaultSpectrumGUI(eosGUI aThis) {
         initComponents();
         buttonGroupSpectrum.add(jRadioButton1);
         buttonGroupSpectrum.add(jRadioButton2);
