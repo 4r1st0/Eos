@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class WriteDefaultSpectrum {
     
-    // implementation using 
+    // implementation using read-out from jTextField to get OutputFileName
     public void WriteDefaultSpectrum(javax.swing.JTextField OutFileName,
                                      String header, int NofEBins,
                                      int spectrumForm, int energyScale,
@@ -27,7 +27,6 @@ public class WriteDefaultSpectrum {
                                      List<Double> spectrumBinUnc) 
                                      throws Exception {
         
-
         try(PrintWriter writer = 
                     new PrintWriter(OutFileName.getText() + ".flu", "ASCII")) {   
             if(header.length() > 80) {
@@ -64,7 +63,54 @@ public class WriteDefaultSpectrum {
                                     formatExponential.getDecimalFormatSymbols())));
             }
         } 
+    } 
+
+    // implementation using string to get OutputFileName
+    public void WriteDefaultSpectrum(String OutFileName,
+                                     String header, int NofEBins,
+                                     int spectrumForm, int energyScale,
+                                     double highEbinEdge,
+                                     List<Double> leftEBinEdge,
+                                     List<Double> spectrumBin,
+                                     List<Double> spectrumBinUnc) 
+                                     throws Exception {
         
-    }  
+        try(PrintWriter writer = 
+                    new PrintWriter(OutFileName + ".flu", "ASCII")) {   
+            if(header.length() > 80) {
+                writer.println(header.substring(0, 80));
+            } else {
+                writer.println(header);
+            }
+        
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+            otherSymbols.setDecimalSeparator('.');
+            otherSymbols.setExponentSeparator("E");                             // define exponent separator
+            otherSymbols.setMinusSign('-');                                // define minus (-) sign
+            DecimalFormat formatExponential = new DecimalFormat("0.0000E00",
+                                                                otherSymbols);
+            String formatStrHead1 = "%12s%11s%n";
+            writer.write(String.format(formatStrHead1, spectrumForm, energyScale));
+            String formatStrHead2 = "%12s%11s%12s%12s%n";
+            writer.write(String.format(formatStrHead2, "1", NofEBins, NofEBins, 
+                  OutputFormatter.exponentSign(
+                                    formatExponential.format(highEbinEdge),
+                                    formatExponential.getDecimalFormatSymbols())));
+                        
+            String formatStrData = "%13s%12s%13s%n";
+            for(int i = 0; i < NofEBins; i ++ ) {    
+                writer.write(String.format(formatStrData, 
+                            OutputFormatter.exponentSign(
+                                    formatExponential.format(leftEBinEdge.get(i)),
+                                    formatExponential.getDecimalFormatSymbols()),
+                            OutputFormatter.exponentSign(
+                                    formatExponential.format(spectrumBin.get(i)),
+                                    formatExponential.getDecimalFormatSymbols()),
+                            OutputFormatter.exponentSign(
+                                    formatExponential.format(spectrumBinUnc.get(i)),
+                                    formatExponential.getDecimalFormatSymbols())));
+            }
+        } 
+    }
     
 }
