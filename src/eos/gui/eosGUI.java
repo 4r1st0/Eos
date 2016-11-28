@@ -423,10 +423,10 @@ public class eosGUI extends javax.swing.JFrame {
         
         for (String line : textAreaDetectorName.getText().split("\\n")) {
             if(line.length()>8){
-                line = line.replaceAll("\\s+","");
-                sphereNames.add(line.substring(0,8));
+                line = line.replaceAll("\\s+","");                              // remove space and hidden blank characters
+                sphereNames.add(line.substring(0,8));                           // Format restriction: DetectorName is only valid with max. 8 characters
             } else {
-                line = line.replaceAll("\\s+","");
+                line = line.replaceAll("\\s+","");                              // remove space and hidden blank characters
                 sphereNames.add(line);
             }
         }
@@ -464,15 +464,15 @@ public class eosGUI extends javax.swing.JFrame {
             otherSymbols.setDecimalSeparator('.');
             otherSymbols.setExponentSeparator("E");
             otherSymbols.setMinusSign('-');
-            DecimalFormat formatExponential = new DecimalFormat("0.0000E00", otherSymbols);
+//            DecimalFormat formatExponential = new DecimalFormat("0.0000E00", otherSymbols);
             NumberFormat formatPercent2 = new DecimalFormat("0.00", otherSymbols);
             NumberFormat formatPercent1 = new DecimalFormat("0.0", otherSymbols);
             String formatStrData = "%-8s%6s%15s%15s%8s%8s%6s%n";
             for(int i = 0; i < numberOfSpheres; i ++ ) {    
                 writer.write(String.format(formatStrData, sphereNames.get(i), 
                             sphereDiameter.get(i),
-                            OutputFormatter.exponentSign(formatExponential.format(sphereCounts.get(i)), formatExponential.getDecimalFormatSymbols()),
-                            OutputFormatter.exponentSign(formatExponential.format(sphereAbsUncertainty.get(i)), formatExponential.getDecimalFormatSymbols()),
+                            OutputFormatter.exponentSign(sphereCounts.get(i)),
+                            OutputFormatter.exponentSign(sphereAbsUncertainty.get(i)),
                             formatPercent2.format(spherePerUncertainty.get(i)),
                             formatPercent2.format(responsePerUncertainty.get(i)), i+1));
             }

@@ -34,33 +34,19 @@ public class WriteDefaultSpectrum {
             } else {
                 writer.println(header);
             }
-        
-            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-            otherSymbols.setDecimalSeparator('.');
-            otherSymbols.setExponentSeparator("E");                             // define exponent separator
-            otherSymbols.setMinusSign('-');                                // define minus (-) sign
-            DecimalFormat formatExponential = new DecimalFormat("0.0000E00",
-                                                                otherSymbols);
+
             String formatStrHead1 = "%12s%11s%n";
             writer.write(String.format(formatStrHead1, spectrumForm, energyScale));
             String formatStrHead2 = "%12s%11s%12s%12s%n";
             writer.write(String.format(formatStrHead2, "1", NofEBins, NofEBins, 
-                  OutputFormatter.exponentSign(
-                                    formatExponential.format(highEbinEdge),
-                                    formatExponential.getDecimalFormatSymbols())));
+                  OutputFormatter.exponentSign(highEbinEdge)));
                         
             String formatStrData = "%13s%12s%13s%n";
             for(int i = 0; i < NofEBins; i ++ ) {    
                 writer.write(String.format(formatStrData, 
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(leftEBinEdge.get(i)),
-                                    formatExponential.getDecimalFormatSymbols()),
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(spectrumBin.get(i)),
-                                    formatExponential.getDecimalFormatSymbols()),
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(spectrumBinUnc.get(i)),
-                                    formatExponential.getDecimalFormatSymbols())));
+                            OutputFormatter.exponentSign(leftEBinEdge.get(i)),
+                            OutputFormatter.exponentSign(spectrumBin.get(i)),
+                            OutputFormatter.exponentSign(spectrumBinUnc.get(i))));
             }
         } 
     } 
@@ -83,32 +69,18 @@ public class WriteDefaultSpectrum {
                 writer.println(header);
             }
         
-            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-            otherSymbols.setDecimalSeparator('.');
-            otherSymbols.setExponentSeparator("E");                             // define exponent separator
-            otherSymbols.setMinusSign('-');                                // define minus (-) sign
-            DecimalFormat formatExponential = new DecimalFormat("0.0000E00",
-                                                                otherSymbols);
             String formatStrHead1 = "%12s%11s%n";
             writer.write(String.format(formatStrHead1, spectrumForm, energyScale));
             String formatStrHead2 = "%12s%11s%12s%12s%n";
             writer.write(String.format(formatStrHead2, "1", NofEBins, NofEBins, 
-                  OutputFormatter.exponentSign(
-                                    formatExponential.format(highEbinEdge),
-                                    formatExponential.getDecimalFormatSymbols())));
+                  OutputFormatter.exponentSign(highEbinEdge)));
                         
             String formatStrData = "%13s%12s%13s%n";
             for(int i = 0; i < NofEBins; i ++ ) {    
                 writer.write(String.format(formatStrData, 
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(leftEBinEdge.get(i)),
-                                    formatExponential.getDecimalFormatSymbols()),
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(spectrumBin.get(i)),
-                                    formatExponential.getDecimalFormatSymbols()),
-                            OutputFormatter.exponentSign(
-                                    formatExponential.format(spectrumBinUnc.get(i)),
-                                    formatExponential.getDecimalFormatSymbols())));
+                            OutputFormatter.exponentSign(leftEBinEdge.get(i)),
+                            OutputFormatter.exponentSign(spectrumBin.get(i)),
+                            OutputFormatter.exponentSign(spectrumBinUnc.get(i))));
             }
         } 
     }
