@@ -20,14 +20,27 @@ import java.text.*;
  * exponentSign method:           take any double and convert to 0.0000E(+/-)00
  *                                12345     ->  1.2345E+04 and
  *                                0.12341   ->  1.2340E-01
+ * 
+ * Input:   Any double variable.
+ * Output:  String with format, 0.0000E(+/-)00
+ * 
  * The special  exponentSign format can be used for UMG data input files,
  * which requires equal length of data values.
  */
 public class OutputFormatter {
     
-    public static String exponentSign(final String s,
-                                      final DecimalFormatSymbols symbols) {
+    public static String exponentSign(final double d) {
     String result;
+    
+    // set UMG format
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+    symbols.setDecimalSeparator('.');
+    symbols.setExponentSeparator("E");
+    symbols.setMinusSign('-');
+    DecimalFormat formatExponential = new DecimalFormat("0.0000E00", symbols);
+    
+    String s;
+    s = formatExponential.format(d);
     final String expo = symbols.getExponentSeparator();
     final char minus = symbols.getMinusSign();
     if (!s.contains(expo + minus)) { // don't blast a negative sign
