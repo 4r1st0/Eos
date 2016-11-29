@@ -72,12 +72,46 @@ public class WriteInputFile {
             writer.println(" 1030  FORMAT(2A4,F6.1,2E15.5,2F8.2,I6)");
             writer.close();  
             //============END: Write data to file===============================
-            }
+        }
     }
     
-   /* // method to create .txt input files for the WinBUGS package
-    public void writeWinBUGS() throws Exception {
+    // method to create .txt input files for the WinBUGS package
+    public void writeWinBUGS(java.awt.TextField OutFileName, String header,
+                             int NofEnergyBins, int NofSpheres,
+                             List<Double> sphereCounts,
+                             List<Double> sphereUncertainty) throws Exception {
+        try(PrintWriter writer = 
+                new PrintWriter(OutFileName.getText() + "class.txt", "ASCII")) {
+            ;
+            writer.println("# " + header);
+            writer.println("#");
+            writer.println("# additional comments");
+            writer.println("#");
+            writer.println("list(");
+            writer.println("NEB = "+ NofEnergyBins + ",");
+            writer.println("N = " + NofSpheres + ",");
+            writer.println("cnt=c(");
+            for(int i = 0; i < NofSpheres; i ++ ) {
+                if((i+1) == NofSpheres) {
+                    writer.println(sphereCounts.get(i));
+                } else {
+                    writer.println(sphereCounts.get(i)+",");
+                }
+            }
+            writer.println("),");
+            writer.println("unc=c(");
+            for(int i = 0; i < NofSpheres; i ++ ) {
+                if((i+1) == NofSpheres) {
+                    writer.println(sphereUncertainty.get(i));
+                } else {
+                    writer.println(sphereUncertainty.get(i)+",");
+                }
+            }
+            writer.println(")");
+            writer.println(")");
+            writer.close();  
+        }
         
-    }*/
+    }
 
 }
