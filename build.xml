@@ -10,6 +10,19 @@
 <project name="Eos" default="default" basedir=".">
     <description>Builds, tests, and runs the project Eos.</description>
     <import file="nbproject/build-impl.xml"/>
+    <target name="-post-jar" description="Sets the buildversion for the current build">
+    <propertyfile file="nbproject/project.properties">
+        <entry key="application.buildnumber" value="1" type="int" operation="+"/>
+    </propertyfile>
+    </target>
+     
+    <target name="-pre-jar" depends="compile">
+    <manifest file="MANIFEST.MF">
+        <attribute name="Main-Class" value="Eos"/>
+        <attribute name="Implementation-Version" value="${application.version}"/>
+    </manifest>
+    </target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 
