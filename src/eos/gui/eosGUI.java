@@ -20,7 +20,7 @@ import java.io.PrintWriter;
  */
 public class eosGUI extends javax.swing.JFrame {
     
-    public static final String BUILD_NUMBER = "0.0.0";
+    public static final String VERSION_NUMBER = "0.0.11";
     
     private String line;
     private String header;
@@ -96,7 +96,7 @@ public class eosGUI extends javax.swing.JFrame {
         jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Eos - Version: alpha-0.2");
+        setTitle("Eos: Version " + VERSION_NUMBER);
         setPreferredSize(new java.awt.Dimension(900, 550));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "OUTPUT"));
@@ -537,7 +537,7 @@ public class eosGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_clearReadUncButtonActionPerformed
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
-        JOptionPane.showMessageDialog(null, "Eos - Version: alpha-0.2", "About", JOptionPane.INFORMATION_MESSAGE); 
+        JOptionPane.showMessageDialog(null, "Eos - Version: " + VERSION_NUMBER, "About", JOptionPane.INFORMATION_MESSAGE); 
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
