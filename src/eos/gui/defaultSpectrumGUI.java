@@ -417,9 +417,6 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
         }
-        
-     
-
         //============END: Write data to file===================================
         
         //============START: clear ArrayLists===================================
