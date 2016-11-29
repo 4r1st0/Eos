@@ -20,7 +20,7 @@ import java.io.PrintWriter;
  */
 public class eosGUI extends javax.swing.JFrame {
     
-    public static final String VERSION_NUMBER = "0.0.12";
+    public static final String VERSION_NUMBER = "0.0.13";
     
     private String line;
     private String header;
