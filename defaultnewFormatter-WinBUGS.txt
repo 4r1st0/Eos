@@ -1,0 +1,14 @@
+# !header restricted to max. 80 characters!
+#
+# additional comments
+#
+list(
+NEB = 131,
+N = 1,
+cnt=c(
+0.0
+),
+unc=c(
+0.0
+)
+)
