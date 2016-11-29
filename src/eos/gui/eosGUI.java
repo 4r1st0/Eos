@@ -16,9 +16,11 @@ import javax.swing.JOptionPane;
 import java.io.PrintWriter;
 /**
  *
- * @author dommer01
+ * @author M. Dommert
  */
 public class eosGUI extends javax.swing.JFrame {
+    
+    public static final String BUILD_NUMBER = "0.0.0";
     
     private String line;
     private String header;
@@ -449,88 +451,34 @@ public class eosGUI extends javax.swing.JFrame {
         
         // CHECK: UMG Output requested?
         if(checkboxUMGOut.getState()) {     
-            //============START: Write data to file=================================
+            //============START: Write data to file=============================            
             try{
-            PrintWriter writer = new PrintWriter(textFieldOutputName.getText() + "-UMG.ibu", "ASCII");
-            if(header.length() > 80) {
-                writer.println(header.substring(0, 80));
-            } else {
-                writer.println(header);
-            }
-            String formatStrHead = "%5s%5s%n";
-            writer.write(String.format(formatStrHead, numberOfSpheres, dataCorrectionFactor));
-                        
-            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
-            otherSymbols.setDecimalSeparator('.');
-            otherSymbols.setExponentSeparator("E");
-            otherSymbols.setMinusSign('-');
-//            DecimalFormat formatExponential = new DecimalFormat("0.0000E00", otherSymbols);
-            NumberFormat formatPercent2 = new DecimalFormat("0.00", otherSymbols);
-            NumberFormat formatPercent1 = new DecimalFormat("0.0", otherSymbols);
-            String formatStrData = "%-8s%6s%15s%15s%8s%8s%6s%n";
-            for(int i = 0; i < numberOfSpheres; i ++ ) {    
-                writer.write(String.format(formatStrData, sphereNames.get(i), 
-                            sphereDiameter.get(i),
-                            OutputFormatter.exponentSign(sphereCounts.get(i)),
-                            OutputFormatter.exponentSign(sphereAbsUncertainty.get(i)),
-                            formatPercent2.format(spherePerUncertainty.get(i)),
-                            formatPercent2.format(responsePerUncertainty.get(i)), i+1));
-            }
-            writer.println("");
-            writer.println("Dete      Diam      reading M        abs unc   % unc   % unc");
-            writer.println("ctor      eter     count rate           of M    of M    of R  flag");
-            writer.println("");
-            writer.println("12341234----.-123456789.12345---------.12345-----.12-----.12I23456");
-            writer.println("");
-            writer.println("Format line 1:");
-            writer.println(" 1000  FORMAT(20A4)");
-            writer.println("");
-            writer.println("Format line 2: NOD, rdummy      NOD = number of detectors");
-            writer.println(" 1020  FORMAT( * )");
-            writer.println("");
-            writer.println("Format line 3 to NOD+2");
-            writer.println(" 1030  FORMAT(2A4,F6.1,2E15.5,2F8.2,I6)");
-            writer.close();  
-            //============END: Write data to file===============================
+                WriteInputFile writeUMGfile = new WriteInputFile();
+                writeUMGfile.writeUMG(textFieldOutputName,
+                                header, numberOfSpheres, dataCorrectionFactor,
+                                sphereNames, sphereDiameter, sphereCounts,
+                                sphereAbsUncertainty, spherePerUncertainty,
+                                responsePerUncertainty);
             } catch (Exception e) {
-            // catch write UMG file exception
+                System.out.println("problem with path : "+ textFieldOutputName.getText());
+                System.out.println(e.getMessage());
             }
+            //============END: Write data to file===============================
         }  
         
         // CHECK: WinBUGS Output requested?
         if(checkboxWinBUGSOut.getState()) {
+            //============START: Write data to file=============================
             try{
-            PrintWriter writer = new PrintWriter(textFieldOutputName.getText() + "-WinBUGS.txt", "UTF-8");
-            writer.println("# " + header);
-            writer.println("#");
-            writer.println("# additional comments");
-            writer.println("#");
-            writer.println("list(");
-            writer.println("NEB = "+ numberOfEnergyBins + ",");
-            writer.println("N = " + numberOfSpheres + ",");
-            writer.println("cnt=c(");
-            for(int i = 0; i < numberOfSpheres; i ++ ) {
-                if((i+1) == numberOfSpheres) {
-                    writer.println(sphereCounts.get(i));
-                } else {
-                    writer.println(sphereCounts.get(i)+",");
-                }
-            }
-            writer.println("),");
-            writer.println("unc=c(");
-            for(int i = 0; i < numberOfSpheres; i ++ ) {
-                if((i+1) == numberOfSpheres) {
-                    writer.println(spherePerUncertainty.get(i));
-                } else {
-                    writer.println(spherePerUncertainty.get(i)+",");
-                }
-            }
-            writer.println(")");
-            writer.println(")");
-            writer.close();  
+                WriteInputFile writeWINfile = new WriteInputFile();
+                writeWINfile.writeWinBUGS(textFieldOutputName,
+                                    header, numberOfEnergyBins, numberOfSpheres, 
+                                    sphereCounts, spherePerUncertainty);
             } catch (Exception e) {
-            // catch write WinBUGS file exception
+                System.out.println("problem with path : "+ textFieldOutputName.getText());
+                System.out.println(e.getMessage());
             }
+            //============END: Write data to file===============================
         }
         
         //=============START: Information Messages==============================
@@ -546,6 +494,7 @@ public class eosGUI extends javax.swing.JFrame {
         //=============END: Information Messages================================
         
         //============START: clear ArrayLists===================================
+        // free ArrayList, so there is no build-up due to multiple use of SaveOutputActionPerformed
         sphereNames = new ArrayList<String>();
         sphereDiameter = new ArrayList<Double>();
         sphereCounts = new ArrayList<Double>();
