@@ -466,38 +466,17 @@ public class eosGUI extends javax.swing.JFrame {
         
         // CHECK: WinBUGS Output requested?
         if(checkboxWinBUGSOut.getState()) {
+            //============START: Write data to file=============================
             try{
-            PrintWriter writer = new PrintWriter(textFieldOutputName.getText() + "-WinBUGS.txt", "UTF-8");
-            writer.println("# " + header);
-            writer.println("#");
-            writer.println("# additional comments");
-            writer.println("#");
-            writer.println("list(");
-            writer.println("NEB = "+ numberOfEnergyBins + ",");
-            writer.println("N = " + numberOfSpheres + ",");
-            writer.println("cnt=c(");
-            for(int i = 0; i < numberOfSpheres; i ++ ) {
-                if((i+1) == numberOfSpheres) {
-                    writer.println(sphereCounts.get(i));
-                } else {
-                    writer.println(sphereCounts.get(i)+",");
-                }
-            }
-            writer.println("),");
-            writer.println("unc=c(");
-            for(int i = 0; i < numberOfSpheres; i ++ ) {
-                if((i+1) == numberOfSpheres) {
-                    writer.println(spherePerUncertainty.get(i));
-                } else {
-                    writer.println(spherePerUncertainty.get(i)+",");
-                }
-            }
-            writer.println(")");
-            writer.println(")");
-            writer.close();  
+                WriteInputFile writeWINfile = new WriteInputFile();
+                writeWINfile.writeWinBUGS(textFieldOutputName,
+                                    header, numberOfEnergyBins, numberOfSpheres, 
+                                    sphereCounts, spherePerUncertainty);
             } catch (Exception e) {
-            // catch write WinBUGS file exception
+                System.out.println("problem with path : "+ textFieldOutputName.getText());
+                System.out.println(e.getMessage());
             }
+            //============END: Write data to file===============================
         }
         
         //=============START: Information Messages==============================
