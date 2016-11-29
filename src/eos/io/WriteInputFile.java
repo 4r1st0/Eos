@@ -21,6 +21,9 @@ import java.util.List;
  * create .ibu input files for the UMG unfloding package; and second the
  * writeWinBUGS method to create input files for the WinBUGS package.
  * 
+ * Currently implemented version utilizes direct read-out from 
+ * java.awt.TextField to get OutFileName!
+ * 
  */
 public class WriteInputFile {
     
@@ -50,11 +53,11 @@ public class WriteInputFile {
             String formatStrData = "%-8s%6s%15s%15s%8s%8s%6s%n";
             for(int i = 0; i < NofSpheres; i ++ ) {    
                 writer.write(String.format(formatStrData, sphereNames.get(i), 
-                            sphereDiameter.get(i),
-                            OutputFormatter.exponentSign(sphereCounts.get(i)),
-                            OutputFormatter.exponentSign(sphereAbsUncertainty.get(i)),
-                            formatPercent2.format(spherePerUncertainty.get(i)),
-                            formatPercent2.format(responsePerUncertainty.get(i)), i+1));
+                    sphereDiameter.get(i),
+                    OutputFormatter.exponentSign(sphereCounts.get(i)),
+                    OutputFormatter.exponentSign(sphereAbsUncertainty.get(i)),
+                    formatPercent2.format(spherePerUncertainty.get(i)),
+                    formatPercent2.format(responsePerUncertainty.get(i)), i+1));
             }
             writer.println("");
             writer.println("Dete      Diam      reading M        abs unc   % unc   % unc");
@@ -81,8 +84,7 @@ public class WriteInputFile {
                              List<Double> sphereCounts,
                              List<Double> sphereUncertainty) throws Exception {
         try(PrintWriter writer = 
-                new PrintWriter(OutFileName.getText() + "class.txt", "ASCII")) {
-            ;
+                new PrintWriter(OutFileName.getText() + ".txt", "ASCII")) {
             writer.println("# " + header);
             writer.println("#");
             writer.println("# additional comments");
@@ -111,7 +113,6 @@ public class WriteInputFile {
             writer.println(")");
             writer.close();  
         }
-        
     }
 
 }

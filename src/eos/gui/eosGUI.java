@@ -16,9 +16,11 @@ import javax.swing.JOptionPane;
 import java.io.PrintWriter;
 /**
  *
- * @author dommer01
+ * @author M. Dommert
  */
 public class eosGUI extends javax.swing.JFrame {
+    
+    public static final String BUILD_NUMBER = "0.0.0";
     
     private String line;
     private String header;
@@ -492,6 +494,7 @@ public class eosGUI extends javax.swing.JFrame {
         //=============END: Information Messages================================
         
         //============START: clear ArrayLists===================================
+        // free ArrayList, so there is no build-up due to multiple use of SaveOutputActionPerformed
         sphereNames = new ArrayList<String>();
         sphereDiameter = new ArrayList<Double>();
         sphereCounts = new ArrayList<Double>();
