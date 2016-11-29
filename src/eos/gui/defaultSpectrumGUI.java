@@ -376,32 +376,48 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         
         try {
             numberOfEnergyBins = Integer.parseInt(jTextFieldEnergyBins.getText());
-        } catch (NumberFormatException e) {
-            textAreaOutLog.append("# of Energy Bins is no integer!\n");
+        } catch (NumberFormatException e1) {
+            textAreaOutLog.append("# of Energy Bins: requires integer!\n");
             errorFlag = 1;
         }
         
         try {
             energyHighBinEdge = Double.parseDouble(jTextField4.getText());
-        } catch (NumberFormatException e) {
-            textAreaOutLog.append("Highest energy bin edge is no double variable!\n");
+        } catch (NumberFormatException e2) {
+            textAreaOutLog.append("Highest energy bin edge: requires double variable!\n");
             errorFlag = 1;
         }
-        
+        try {
         for (String line : jTextAreaBinEdge.getText().split("\\n")) {
             energyLeftEdge.add(Double.parseDouble(line));
         }
+        } catch (NumberFormatException e3) {
+            textAreaOutLog.append("left energy bin edge: requires list of doubles!\n");
+            errorFlag = 1;
+        }
+        try {
         for (String line : jTextAreaSpectrum.getText().split("\\n")) {
             spectrumBin.add(Double.parseDouble(line));
+        } 
+        } catch (NumberFormatException e4) {
+            textAreaOutLog.append("spectrum bin: requires list of doubles!\n");
+            errorFlag = 1;
         }
+        
+        try {
         for (String line : jTextAreaUncertainty.getText().split("\\n")) {
             spectrumBinUncertainty.add(Double.parseDouble(line));
+        }
+        } catch (NumberFormatException e5) {
+            textAreaOutLog.append("unc. of bin: requires list of doubles!\n");
+            errorFlag = 1;
         }
         //============END: Read data from GUI===================================
 
         //============START: Write data to file=================================
         if(errorFlag != 0) {
             textAreaOutLog.append("Input error. Please check all input fields!\n\n");
+            errorFlag = 0;
         } else {
             try{
                 WriteDefaultSpectrum writeDefaultSpec = new WriteDefaultSpectrum();
