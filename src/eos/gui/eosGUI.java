@@ -20,7 +20,7 @@ import java.io.PrintWriter;
  */
 public class eosGUI extends javax.swing.JFrame {
     
-    public static final String VERSION_NUMBER = "0.0.13";
+    public static final String VERSION_NUMBER = "0.0.14";
     
     private String line;
     private String header;
@@ -33,6 +33,8 @@ public class eosGUI extends javax.swing.JFrame {
     private List<Double> sphereAbsUncertainty = new ArrayList<Double>();
     private List<Double> spherePerUncertainty = new ArrayList<Double>();
     private List<Double> responsePerUncertainty = new ArrayList<Double>();
+    
+    CheckUserInput checkInput = new CheckUserInput();
     
     /**
      * Creates new form ihtGUI
@@ -447,9 +449,15 @@ public class eosGUI extends javax.swing.JFrame {
         for (String line : textAreaResponseUncertainty.getText().split("\\n")) {
             responsePerUncertainty.add(Double.parseDouble(line));
         }
+        
+        int dataError = 0;
+        dataError = checkInput.checkDataUniformity(numberOfSpheres, sphereDiameter.size());
         //============END: Read data from GUI===================================
         
         // CHECK: UMG Output requested?
+        if(dataError != 0) {
+            System.out.println("dataError prob");
+        } else {
         if(checkboxUMGOut.getState()) {     
             //============START: Write data to file=============================            
             try{
@@ -480,7 +488,7 @@ public class eosGUI extends javax.swing.JFrame {
             }
             //============END: Write data to file===============================
         }
-        
+        }
         //=============START: Information Messages==============================
         if(checkboxWinBUGSOut.getState() == false && checkboxUMGOut.getState() == false) {
             JOptionPane.showMessageDialog(null, "No output format selected!", "Information", JOptionPane.INFORMATION_MESSAGE);         

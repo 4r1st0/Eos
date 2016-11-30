@@ -6,6 +6,7 @@
 package eos.gui;
 
 import eos.io.WriteDefaultSpectrum;
+import eos.io.CheckUserInput;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     private List<Double> spectrumBin = new ArrayList<Double>();
     private List<Double> spectrumBinUncertainty = new ArrayList<Double>();
     Exception e;
+    CheckUserInput checkInput = new CheckUserInput();
     
 
     public defaultSpectrumGUI(eosGUI aThis) {
@@ -392,7 +394,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             energyLeftEdge.add(Double.parseDouble(line));
         }
         } catch (NumberFormatException e3) {
-            textAreaOutLog.append("left energy bin edge: requires list of doubles!\n");
+            textAreaOutLog.append("Left energy bin edge: requires list of doubles!\n");
             errorFlag = 1;
         }
         try {
@@ -412,11 +414,20 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             textAreaOutLog.append("unc. of bin: requires list of doubles!\n");
             errorFlag = 1;
         }
+        
+        // check uniformity of given number of energy bins and array size of energyLeftEdge/spectrum/uncertainty 
+        if((checkInput.checkDataUniformity(numberOfEnergyBins, energyLeftEdge.size())
+            + checkInput.checkDataUniformity(numberOfEnergyBins, spectrumBin.size())
+            + checkInput.checkDataUniformity(numberOfEnergyBins, spectrumBinUncertainty.size())) != 0) {
+            textAreaOutLog.append("Length of spectrum array != number of E bin!\n");
+            errorFlag = 1;
+        }
         //============END: Read data from GUI===================================
 
         //============START: Write data to file=================================
         if(errorFlag != 0) {
-            textAreaOutLog.append("Input error. Please check all input fields!\n\n");
+            textAreaOutLog.append("Input error. Please check all input fields!\n" 
+                       + "#===============================================#\n");
             errorFlag = 0;
         } else {
             try{
@@ -431,6 +442,10 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.out.println("problem with path : "+ jTextFieldOutName.getText());
                 System.out.println(e.getMessage());
+            } finally {
+                textAreaOutLog.append("Success! " + jTextFieldOutName.getText() 
+                       + ".flu written!\n" 
+                       + "#===============================================#\n");
             }
         }
         //============END: Write data to file===================================

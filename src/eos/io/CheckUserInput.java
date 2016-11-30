@@ -10,5 +10,23 @@ package eos.io;
  * @author dommer01
  */
 public class CheckUserInput {
+    private static int errorFlag;
     
+    public int checkDataUniformity(int referenceValue, int comparisonValue) {
+        if(comparisonValue != referenceValue) {
+            errorFlag = 1;
+        } else {
+            errorFlag = 0;
+        }
+        return errorFlag;
+    }
+        
+    public int checkHeaderTextfield(String header) {
+        if(header.equals("")) {
+            errorFlag = 1;            
+        } else {
+            errorFlag = 0;
+        }
+        return errorFlag;           
+    }    
 }
