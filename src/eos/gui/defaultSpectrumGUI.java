@@ -91,7 +91,6 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         textAreaOutLog = new java.awt.TextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(620, 920));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "INPUT"));
 
