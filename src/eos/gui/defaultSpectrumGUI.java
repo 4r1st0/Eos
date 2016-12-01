@@ -285,6 +285,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
 
         jLabel10.setText(".flu");
 
+        textAreaOutLog.setEditable(false);
         textAreaOutLog.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -378,7 +379,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         try {
             numberOfEnergyBins = Integer.parseInt(jTextFieldEnergyBins.getText());
         } catch (NumberFormatException e1) {
-            textAreaOutLog.append("# of Energy Bins: requires integer!\n");
+            textAreaOutLog.append(String.format("<b>%s</b>%n","# of Energy Bins: requires integer!"));
             errorFlag = 1;
         }
         
