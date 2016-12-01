@@ -88,10 +88,9 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextFieldOutName = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        textAreaOutLog = new java.awt.TextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(620, 920));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "INPUT"));
 
@@ -178,7 +177,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
                             .addComponent(jRadioButtonkeV)
                             .addComponent(jRadioButtonMeV)
                             .addComponent(jRadioButtoneV))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(7, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -286,7 +285,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
 
         jLabel10.setText(".flu");
 
-        textAreaOutLog.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        jScrollPane4.setViewportView(appendingTextOutLogSpec);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -301,9 +300,9 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
                         .addComponent(jTextFieldOutName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jLabel10)
-                        .addGap(0, 44, Short.MAX_VALUE))
-                    .addComponent(textAreaOutLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonCreateDefaultSpectrum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonClearAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -318,13 +317,15 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldOutName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(jButtonClearSpecUnc)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonClearAll))
-                    .addComponent(textAreaOutLog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -379,14 +380,16 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         try {
             numberOfEnergyBins = Integer.parseInt(jTextFieldEnergyBins.getText());
         } catch (NumberFormatException e1) {
-            textAreaOutLog.append("# of Energy Bins: requires integer!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("# of E bins: "
+                                                + "requires integer value!\n");
             errorFlag = 1;
         }
         
         try {
             energyHighBinEdge = Double.parseDouble(jTextField4.getText());
         } catch (NumberFormatException e2) {
-            textAreaOutLog.append("Highest energy bin edge: requires double variable!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("Highest energy bin: "
+                                                + "requires double value!\n");
             errorFlag = 1;
         }
         try {
@@ -394,7 +397,8 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             energyLeftEdge.add(Double.parseDouble(line));
         }
         } catch (NumberFormatException e3) {
-            textAreaOutLog.append("Left energy bin edge: requires list of doubles!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("left energy bin:"
+                                            + " requires list of doubles!\n");
             errorFlag = 1;
         }
         try {
@@ -402,7 +406,8 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             spectrumBin.add(Double.parseDouble(line));
         } 
         } catch (NumberFormatException e4) {
-            textAreaOutLog.append("spectrum bin: requires list of doubles!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("spectrum bin: "
+                                             + "requires list of doubles!\n");
             errorFlag = 1;
         }
         
@@ -411,7 +416,8 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
             spectrumBinUncertainty.add(Double.parseDouble(line));
         }
         } catch (NumberFormatException e5) {
-            textAreaOutLog.append("unc. of bin: requires list of doubles!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("unc. of bin: "
+                                             + "requires list of doubles!\n");
             errorFlag = 1;
         }
         
@@ -419,15 +425,16 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
         if((checkInput.checkDataUniformity(numberOfEnergyBins, energyLeftEdge.size())
             + checkInput.checkDataUniformity(numberOfEnergyBins, spectrumBin.size())
             + checkInput.checkDataUniformity(numberOfEnergyBins, spectrumBinUncertainty.size())) != 0) {
-            textAreaOutLog.append("Length of spectrum array != number of E bin!\n");
+            appendingTextOutLogSpec.appendTextErrorMinor("Data array length inconsistent "
+                                                + "with number of spheres! \n");
             errorFlag = 1;
         }
         //============END: Read data from GUI===================================
 
         //============START: Write data to file=================================
         if(errorFlag != 0) {
-            textAreaOutLog.append("Input error. Please check all input fields!\n" 
-                       + "#===============================================#\n");
+            appendingTextOutLogSpec.appendTextErrorMajor("Input error. Please "
+                                                + "check all input fields!\n");
             errorFlag = 0;
         } else {
             try{
@@ -443,10 +450,10 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
                 System.out.println("problem with path : "+ jTextFieldOutName.getText());
                 System.out.println(e.getMessage());
             } finally {
-                textAreaOutLog.append("Success! " + jTextFieldOutName.getText() 
-                       + ".flu written!\n" 
-                       + "#===============================================#\n");
+                appendingTextOutLogSpec.appendTextSuccess("Success! Spectrum file successfully written"
+                    + " to: " +  jTextFieldOutName.getText() +".flu \n");
             }
+            appendingTextOutLogSpec.appendText("#==============================#\n");
         }
         //============END: Write data to file===================================
         
@@ -520,6 +527,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private final eos.io.AppendingTextPane appendingTextOutLogSpec = new eos.io.AppendingTextPane();
     private javax.swing.ButtonGroup buttonGroupEnergy;
     private javax.swing.ButtonGroup buttonGroupSpectrum;
     private javax.swing.JButton jButtonAddZero;
@@ -547,6 +555,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea jTextAreaBinEdge;
     private javax.swing.JTextArea jTextAreaSpectrum;
     private javax.swing.JTextArea jTextAreaUncertainty;
@@ -554,6 +563,5 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEnergyBins;
     private javax.swing.JTextField jTextFieldHeaderSpectrum;
     private javax.swing.JTextField jTextFieldOutName;
-    private java.awt.TextArea textAreaOutLog;
     // End of variables declaration//GEN-END:variables
 }

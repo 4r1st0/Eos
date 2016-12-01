@@ -9,18 +9,15 @@ import eos.io.*;
 
 import java.awt.TextArea;
 import java.util.*;
-import java.text.*;
 import javax.swing.JOptionPane;
 
-
-import java.io.PrintWriter;
 /**
  *
  * @author M. Dommert
  */
 public class eosGUI extends javax.swing.JFrame {
     
-    public static final String VERSION_NUMBER = "0.0.14";
+    public static final String VERSION_NUMBER = "1.0.1";
     
     private String line;
     private String header;
@@ -34,6 +31,7 @@ public class eosGUI extends javax.swing.JFrame {
     private List<Double> spherePerUncertainty = new ArrayList<Double>();
     private List<Double> responsePerUncertainty = new ArrayList<Double>();
     
+    private int errorFlag = 0;
     CheckUserInput checkInput = new CheckUserInput();
     
     /**
@@ -41,6 +39,10 @@ public class eosGUI extends javax.swing.JFrame {
      */
     public eosGUI() {
         initComponents();
+        // write welcome message to LogOut
+        appendingTextOutLog.appendTextMajor("Welcome to Eos v" 
+                                            + VERSION_NUMBER + "\n");
+        appendingTextOutLog.appendText("#==============================#\n");
     }
 
     /**
@@ -86,6 +88,8 @@ public class eosGUI extends javax.swing.JFrame {
         addZeroButton = new java.awt.Button();
         labelNEB = new java.awt.Label();
         textFieldEnergyBins = new java.awt.TextField();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -99,7 +103,6 @@ public class eosGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eos: Version " + VERSION_NUMBER);
-        setPreferredSize(new java.awt.Dimension(900, 550));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "OUTPUT"));
 
@@ -354,6 +357,23 @@ public class eosGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "PROCESS LOG"));
+
+        appendingTextOutLog.setContentType("text/html"); // NOI18N
+        appendingTextOutLog.setText("");
+        jScrollPane1.setViewportView(appendingTextOutLog);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+        );
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Load UMG File");
@@ -397,18 +417,23 @@ public class eosGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -419,18 +444,32 @@ public class eosGUI extends javax.swing.JFrame {
         header = textFieldHeader.getText();
         try {
             numberOfSpheres = Integer.parseInt(textFieldNumberOfSpheres.getText());
+        } catch (NumberFormatException e1) {
+            errorFlag = 1;
+            appendingTextOutLog.appendTextErrorMinor("# of spheres: "
+                                                + "requires integer value!\n");
+        }    
+        try {
             numberOfEnergyBins = Integer.parseInt(textFieldEnergyBins.getText());
+        } catch (NumberFormatException e2) {
+            errorFlag = 1;
+            appendingTextOutLog.appendTextErrorMinor("# of E bins: "
+                                                + "requires integer value!\n");
+        }   
+        try {
             dataCorrectionFactor = Double.parseDouble(textFieldDataCorrectionFactor.getText());
-        } catch (NumberFormatException e) {
-        // Invalid double String.
-        }     
+        } catch (NumberFormatException e3) {
+            errorFlag = 1;
+            appendingTextOutLog.appendTextErrorMinor("Data corr. factor: "
+                                                + "requires double value!\n");
+        }   
         
+        try {
         for (String line : textAreaDetectorName.getText().split("\\n")) {
-            if(line.length()>8){
-                line = line.replaceAll("\\s+","");                              // remove space and hidden blank characters
+            line = line.replaceAll("\\s+","");                                  // remove space and hidden blank characters
+            if(line.length()>8){              
                 sphereNames.add(line.substring(0,8));                           // Format restriction: DetectorName is only valid with max. 8 characters
             } else {
-                line = line.replaceAll("\\s+","");                              // remove space and hidden blank characters
                 sphereNames.add(line);
             }
         }
@@ -449,15 +488,33 @@ public class eosGUI extends javax.swing.JFrame {
         for (String line : textAreaResponseUncertainty.getText().split("\\n")) {
             responsePerUncertainty.add(Double.parseDouble(line));
         }
+        } catch (NumberFormatException e4) {
+            errorFlag = 1;
+            appendingTextOutLog.appendTextErrorMinor("Data array contains "
+                                                + "invalid data format! \n");
+        }
         
-        int dataError = 0;
-        dataError = checkInput.checkDataUniformity(numberOfSpheres, sphereDiameter.size());
+        // check, whether length of data array equals number of spheres
+        if(checkInput.checkDataUniformity(numberOfSpheres, sphereNames.size())
+          +checkInput.checkDataUniformity(numberOfSpheres, sphereDiameter.size())
+          +checkInput.checkDataUniformity(numberOfSpheres, sphereCounts.size())
+          +checkInput.checkDataUniformity(numberOfSpheres, sphereAbsUncertainty.size())
+          +checkInput.checkDataUniformity(numberOfSpheres, spherePerUncertainty.size())
+          +checkInput.checkDataUniformity(numberOfSpheres, responsePerUncertainty.size()) 
+           != 0) {
+            appendingTextOutLog.appendTextErrorMinor("Data array length inconsistent "
+                                                + "with number of spheres! \n");
+            errorFlag = 1;
+        }
         //============END: Read data from GUI===================================
         
-        // CHECK: UMG Output requested?
-        if(dataError != 0) {
-            System.out.println("dataError prob");
+        
+        if(errorFlag != 0) {
+            appendingTextOutLog.appendTextErrorMajor("Input error. "
+                                        + "Please check all input fields! \n");
+            errorFlag = 0;
         } else {
+        // CHECK: UMG Output requested?
         if(checkboxUMGOut.getState()) {     
             //============START: Write data to file=============================            
             try{
@@ -472,6 +529,8 @@ public class eosGUI extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
             //============END: Write data to file===============================
+            appendingTextOutLog.appendTextSuccess("Success! UMG file successfully written"
+                    + " to: " +  textFieldOutputName.getText() +".ibu \n");
         }  
         
         // CHECK: WinBUGS Output requested?
@@ -487,17 +546,22 @@ public class eosGUI extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
             //============END: Write data to file===============================
+            appendingTextOutLog.appendTextSuccess("WinBUGS file successfully written to: " +  textFieldOutputName.getText() +".txt \n");
         }
+        appendingTextOutLog.appendText("#==============================#\n");
         }
+        
         //=============START: Information Messages==============================
         if(checkboxWinBUGSOut.getState() == false && checkboxUMGOut.getState() == false) {
             JOptionPane.showMessageDialog(null, "No output format selected!", "Information", JOptionPane.INFORMATION_MESSAGE);         
         }
         if(numberOfSpheres == 0) {
-            JOptionPane.showMessageDialog(null, "Number of Spheres equals zero or empty!\n" + "No data written to file.", "Information", JOptionPane.INFORMATION_MESSAGE);         
+            JOptionPane.showMessageDialog(null, "Number of Spheres equals zero or empty!\n" 
+                    + "No data written to file.", "Information", JOptionPane.INFORMATION_MESSAGE);         
         }
         if(header.length() > 80) {
-            JOptionPane.showMessageDialog(null, "Header length greater 80 characters.\n" + "Header shortened to max. 80 characters.", "Information", JOptionPane.INFORMATION_MESSAGE);         
+            JOptionPane.showMessageDialog(null, "Header length greater 80 characters.\n" 
+                    + "Header shortened to max. 80 characters.", "Information", JOptionPane.INFORMATION_MESSAGE);         
         }
         //=============END: Information Messages================================
         
@@ -569,6 +633,7 @@ public class eosGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button addZeroButton;
+    private final eos.io.AppendingTextPane appendingTextOutLog = new eos.io.AppendingTextPane();
     private java.awt.Button button1;
     private java.awt.Button button2;
     private java.awt.Checkbox checkboxStandardOut;
@@ -587,6 +652,8 @@ public class eosGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label1;
     private java.awt.Label label10;
     private java.awt.Label label2;
