@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class eosGUI extends javax.swing.JFrame {
     
-    public static final String VERSION_NUMBER = "0.0.14";
+    public static final String VERSION_NUMBER = "1.0.1";
     
     private String line;
     private String header;
@@ -529,7 +529,7 @@ public class eosGUI extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
             //============END: Write data to file===============================
-            appendingTextOutLog.appendTextSuccess("UMG file successfully written"
+            appendingTextOutLog.appendTextSuccess("Success! UMG file successfully written"
                     + " to: " +  textFieldOutputName.getText() +".ibu \n");
         }  
         
