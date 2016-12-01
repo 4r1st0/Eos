@@ -90,6 +90,7 @@ public class eosGUI extends javax.swing.JFrame {
         textFieldEnergyBins = new java.awt.TextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        appendingTextOutLog = new eos.io.AppendingTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -359,8 +360,7 @@ public class eosGUI extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "PROCESS LOG"));
 
-        appendingTextOutLog.setContentType("text/html"); // NOI18N
-        appendingTextOutLog.setText("");
+        appendingTextOutLog.setEditable(false);
         jScrollPane1.setViewportView(appendingTextOutLog);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -633,7 +633,7 @@ public class eosGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button addZeroButton;
-    private final eos.io.AppendingTextPane appendingTextOutLog = new eos.io.AppendingTextPane();
+    private eos.io.AppendingTextPane appendingTextOutLog;
     private java.awt.Button button1;
     private java.awt.Button button2;
     private java.awt.Checkbox checkboxStandardOut;

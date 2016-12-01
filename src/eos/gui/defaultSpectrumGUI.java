@@ -285,6 +285,7 @@ public class defaultSpectrumGUI extends javax.swing.JFrame {
 
         jLabel10.setText(".flu");
 
+        appendingTextOutLogSpec.setEditable(false);
         jScrollPane4.setViewportView(appendingTextOutLogSpec);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
